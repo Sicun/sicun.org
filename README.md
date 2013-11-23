@@ -7,7 +7,7 @@
 > 　　if choose [加入我们][joinus]:  
 > 　　　　[作品][works]  
 
-##index  
+##主页  
 [消息][message] | [通知][notice] | [分享][share] | [作品][works]  
 
 ###消息
