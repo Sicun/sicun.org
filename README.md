@@ -1,5 +1,6 @@
 #TODO
 - - - 
+![原型图](http://it-eproducts.com/images/sicunindex.png)
 ##全局  
  * 可选的标记语言：markdown，reStructuredText和改进的markdown语法（默认，空白字符自动转义）
  * 游客权限：消息、分享、活动、作品、关于
