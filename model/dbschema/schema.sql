@@ -9,8 +9,8 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- table
 -------------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS "user" CASCADE;
-CREATE TABLE "user" (
+DROP TABLE IF EXISTS users CASCADE;
+CREATE TABLE users (
     uid serial PRIMARY KEY,
     nickname varchar(18) UNIQUE,
     qq varchar(18) UNIQUE,
@@ -25,9 +25,9 @@ CREATE TABLE "user" (
 );
 
 
-DROP TABLE IF EXISTS "group" CASCADE;
-CREATE TABLE "group" (
-    uid serial PRIMARY KEY,
+DROP TABLE IF EXISTS groups CASCADE;
+CREATE TABLE groups (
+    gid serial PRIMARY KEY,
     name varchar(32) NOT NULL UNIQUE,
     leader varchar(32)
 );
@@ -35,10 +35,98 @@ CREATE TABLE "group" (
 
 DROP TABLE IF EXISTS group_member CASCADE;
 CREATE TABLE group_member (
-    gid serial REFERENCES "group"(gid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    gid integer REFERENCES groups(gid) NOT NULL,
+    uid integer REFERENCES users(uid) NOT NULL,
     -- 副组长
-    is_subleader bool NOT NULL DEFAULT false
+    is_subleader bool NOT NULL DEFAULT false,
+    PRIMARY KEY (gid, uid)
+);
+
+
+DROP TABLE IF EXISTS inform CASCADE;
+CREATE TABLE inform (
+    id serial PRIMARY KEY,
+    uid integer REFERENCES users(uid),
+    title varchar(100),
+    content varchar(1000),
+    sort varchar(20),
+    place varchar(20),
+    is_use_sms bool default false,
+    is_use_email bool default false,
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS share CASCADE;
+CREATE TABLE share (
+    id serial PRIMARY KEY,
+    uid integer REFERENCES users(uid),
+    title varchar(100),
+    content varchar(1000),
+    url varchar(255),
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS activity CASCADE;
+CREATE TABLE activity (
+    id serial PRIMARY KEY,
+    uid integer REFERENCES users(uid),
+    content varchar(1000),
+    begintime timestamp,
+    -- 集合地点
+    venue varchar(100),
+    cost int,
+    -- 目的地
+    destination varchar(20),
+    is_use_sms bool default false,
+    is_use_email bool default false,
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS project CASCADE;
+CREATE TABLE project (
+    id serial PRIMARY KEY,
+    uid integer REFERENCES users(uid),
+    name varchar(100),
+    -- 摘要
+    abstract varchar(200),
+    need_staff varchar(30),
+    definition varchar(400),
+    -- 项目定位
+    positioning varchar(200),
+    -- 目标
+    destination varchar(20),
+    news varchar(20),
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS footprint CASCADE;
+CREATE TABLE footprint (
+    id serial PRIMARY KEY,
+    content varchar(280),
+    nickname varchar(18),
+    email varchar(50),
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS book CASCADE;
+CREATE TABLE book (
+    id serial PRIMARY KEY,
+    name varchar(100),
+    isbn varchar(13),
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS book_debit CASCADE;
+CREATE TABLE book_debit (
+    book_id integer REFERENCES book(id),
+    uid integer REFERENCES users(uid),
+    createtime timestamp DEFAULT now()
 );
 
 
@@ -50,7 +138,7 @@ CREATE OR REPLACE FUNCTION get_uid(account_s varchar)
   RETURNS integer
 AS $$
     SELECT uid
-      FROM "user"
+      FROM users
      WHERE email = $1
         OR nickname = $1
         OR qq = $1
@@ -68,14 +156,14 @@ DECLARE
     hashuid_s varchar;
 BEGIN
     PERFORM uid
-       FROM "user"
+       FROM users
       WHERE email = $1
          OR penname = $2;
     IF FOUND THEN
         RETURN NULL;
     END IF;
 
-    INSERT INTO "user" (
+    INSERT INTO users (
         email, penname, password)
     VALUES (
         $1, $2, crypt($3, gen_salt('bf')))
@@ -85,27 +173,3 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION user_t()
-  RETURNS trigger
-AS $$
-BEGIN
-    IF (TG_OP = 'DELETE') THEN
-        --DELETE FROM "group" WHERE uid = OLD.uid;
-        RETURN OLD;
-    ELSIF (TG_OP = 'UPDATE') THEN
-        RETURN OLD;
-    ELSIF (TG_OP = 'INSERT') THEN
-        RETURN NEW;
-    END IF;
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
-
-
---------------------------------------------------------------------------------
--- 触发器
---------------------------------------------------------------------------------
-DROP TRIGGER IF EXISTS user_t ON "user";
-CREATE TRIGGER user_t BEFORE DELETE ON "user"
-   FOR EACH ROW EXECUTE PROCEDURE user_t();

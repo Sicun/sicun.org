@@ -17,12 +17,6 @@ def main():
 
 
 if __name__ == "__main__":
-    if settings["debug"]:
-        class RouteHandler(RequestHandler):
-            def get(self):
-                self.render(filename, messages=[])
-
-        urls.append((r"/(.*)", RouteHandler))
     try:
         main()
     except KeyboardInterrupt as e:
