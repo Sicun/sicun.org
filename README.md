@@ -1,6 +1,8 @@
 #TODO
 - - - 
-![原型图](http://it-eproducts.com/images/sicuni-1386512560.png)
+<h3 align="center"><a href="http://pan.baidu.com/s/1BwjuY">原型图.psd</a></h3>  
+![原型图.png](http://it-eproducts.com/images/sicuni-1386512974.png)  
+ 
 ##全局  
  * 可选的标记语言：markdown，reStructuredText和改进的markdown语法（默认，空白字符自动转义）
  * 游客权限：消息、分享、活动、作品、关于
