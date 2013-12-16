@@ -1,6 +1,8 @@
 #TODO
 - - - 
-![原型图](http://it-eproducts.com/images/sicunindex.png)
+<h3 align="center"><a href="http://pan.baidu.com/s/1BwjuY">原型图.psd</a></h3>  
+![原型图.png](http://it-eproducts.com/images/sicuni-1386512974.png)  
+ 
 ##全局  
  * 可选的标记语言：markdown，reStructuredText和改进的markdown语法（默认，空白字符自动转义）
  * 游客权限：消息、分享、活动、作品、关于
@@ -31,7 +33,7 @@
 
 ####[活动][activity]  
  * 显示在[分享][share]上面
- * `时间` `地点` `内容`，渐进披露：`费用` `路线` `集合点` `集合时间`
+ * `时间` `地点` `内容`，渐进披露：`费用` `集合点` `集合时间`
  * 只显示__未完成的活动__
 
 ####[思存动态][doing]  
