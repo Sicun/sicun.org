@@ -43,9 +43,21 @@ CREATE TABLE group_member (
 );
 
 
-DROP TABLE IF EXISTS inform CASCADE;
-CREATE TABLE inform (
-    id serial PRIMARY KEY,
+DROP SEQUENCE IF EXISTS message_seq CASCADE;
+CREATE SEQUENCE message_seq;
+DROP TABLE IF EXISTS message CASCADE;
+CREATE TABLE message (
+    id integer PRIMARY KEY DEFAULT nextval('message_seq'),
+    uid integer REFERENCES users(uid),
+    title varchar(100),
+    content varchar(1000),
+    createtime timestamp DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS notice CASCADE;
+CREATE TABLE notice (
+    id integer PRIMARY KEY DEFAULT nextval('message_seq'),
     uid integer REFERENCES users(uid),
     title varchar(100),
     content varchar(1000),

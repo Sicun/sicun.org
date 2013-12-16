@@ -5,11 +5,14 @@ import os
 import uuid
 from tornado.options import define, options
 from tornado.web import RequestHandler
-from handler import base
+from handler import base, message, user
 
 
 urls = [
-    (r"/", base.IndexHandler),
+    (r"/", message.IndexHandler),
+    (r"/m/notice", message.NoticeHandler),
+    (r"/m/message", message.MessageHandler),
+    (r"/u/(\w+)", user.HomeHandler),
 ]
 
 
@@ -47,4 +50,4 @@ settings = dict(
        +" password=" + options.dbpasswd \
        +" host=" + options.dbhost       \
        +" port=" + str(options.dbport)
-) 
+)
