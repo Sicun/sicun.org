@@ -1,12 +1,14 @@
-# encoding=utf8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import uuid
 import psycopg2
 import logging
 from psycopg2.extensions import TRANSACTION_STATUS_IDLE
 from tornado.escape import json_decode
 
-class Pool:
 
+class Pool(object):
     @classmethod
     def instance(cls, dsn=None, min_size=1, max_size=10000):
         if not hasattr(cls, "_instance"):
@@ -68,8 +70,7 @@ class Pool:
             return self._new_connection()
 
 
-class Connection:
-
+class Connection(object):
     def __init__(self, dsn):
         self.cnn = psycopg2.connect(dsn=dsn)
         self.cur = self.cnn.cursor()
@@ -125,4 +126,3 @@ class Connection:
             result = False
         self.cnn.commit()
         return result
-

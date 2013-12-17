@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from tornado.web import RequestHandler
 from model.message import MessageModel
 from model.user import UserModel
@@ -19,3 +22,9 @@ class BaseHandler(RequestHandler):
     @property
     def user_id(self):
         return self.current_user
+
+    def get(self):
+        self.write_error(404)
+
+    def post(self):
+        self.write_error(403)

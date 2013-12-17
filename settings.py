@@ -10,9 +10,13 @@ from handler import base, message, user
 
 urls = [
     (r"/", message.IndexHandler),
-    (r"/m/notice", message.NoticeHandler),
-    (r"/m/message", message.MessageHandler),
-    (r"/u/(\w+)", user.HomeHandler),
+    (r"/login", user.LoginHandler),
+    (r"/logout", user.LogoutHandler),
+    (r"/register", user.RegisterHandler),
+    (r"/user/(\w+)", user.HomeHandler),
+    (r"/notice/(\d)", message.NoticeHandler),
+    (r"/message/(\d)", message.MessageHandler),
+    (r"/message/create", message.CreateMessageHandler),
 ]
 
 
